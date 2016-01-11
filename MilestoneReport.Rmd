@@ -1,0 +1,212 @@
+---
+title: "Capstone Milestone Report"
+author: "mjurado"
+date: "December 16, 2015"
+output: html_document
+---
+ 
+###Summary
+The goal of this milestone report is to show that the data for this capstone course was successfully obtained and that an exploratory analysis was performed.  In addition, a preview of my plans for the prediction algorithm and application would be provided in a comprehensible manner.
+ 
+###Basic Dataset Information and Statistics
+ 
+ 
+####Loading the Data 
+```{r, cache=TRUE, warning=FALSE}
+library(tm)
+ 
+# Source SwiftKey file
+fileURL <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
+ 
+if(!file.exists("swiftkey.zip")){
+    download.file(fileURL, dest="swiftkey.zip",method="curl")
+    unzip(zipfile="swiftkey.zip")
+}
+## read the files and do a line count
+twitter <- readLines("./final/en_US/en_US.twitter.txt")
+blogs <- readLines("./final/en_US/en_US.blogs.txt")
+news <- readLines("./final/en_US/en_US.news.txt")
+ 
+ 
+## find the number of lines per file
+twitterLC <- length(twitter)
+blogsLC <- length(blogs)
+newsLC <- length(news)
+ 
+## find the max line size; kee; only first value e.g. twitMax[1]
+twitterMax <- sort(nchar(as.vector(twitter),
+                      type="chars"),decreasing=TRUE)[1]
+blogsMax <- sort(nchar(as.vector(blogs),
+                       type="chars"),decreasing=TRUE)[1]
+newsMax <- sort(nchar(as.vector(news),
+                      type="chars"),decreasing=TRUE)[1]
+ 
+## find word counts; parse out words (via spaces) and do a count
+twitterWC <- sum(sapply(strsplit(twitter, "\\s+"), length))
+blogsWC <- sum(sapply(strsplit(blogs, "\\s+"), length))
+newsWC <- sum(sapply(strsplit(news, "\\s+"), length))
+ 
+## Display table of findings
+ 
+fileMetaTable <- data.frame(c(twitterLC, blogsLC, newsLC),
+                        c(twitterWC, blogsWC, newsWC),
+                        c(twitterMax, blogsMax, newsMax))
+ 
+rownames(fileMetaTable) <- c("Twitter", "Blogs", "News")
+names(fileMetaTable) <- c("Record Count","Word Count", "Max Record Size" )
+ 
+```
+ 
+####Metadata Findings
+Below is a table that describes some metadata about the datasets.  
+
+```{r, echo=FALSE}
+fileMetaTable
+```
+ 
+ 
+####Sample Sizing and Data Cleansing
+I will take a small sample from each file for performance purposes. Then I will concatenate the files together and start the data cleansing.
+I will perform the following data cleansing steps:
+
+1) Convert all words to lower case to normalize the words
+2) Remove numbers and punctuation
+3) Strip extraneous whitespace
+4) Remove function words (stop words)
+5) Stem the document by removing common word endings
+6) Remove profanity 
+*Note:  The bad words list was referenced [here](http://raw.githubusercontent.com/shutterstock/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en)*
+
+```{r, warning=FALSE, cache=TRUE}
+library(NLP)
+library(tm)
+library(RWeka)
+ 
+## create the file samples
+sampleSize <- 1000
+twitterSample <- sample(twitter, sampleSize)
+blogSample <- sample(blogs, sampleSize)
+newsSample <- sample(news, sampleSize)
+ 
+ 
+## combine the files
+fullSample <- paste(twitterSample, blogSample, newsSample)
+ 
+sampleCorpus <- VCorpus(VectorSource(fullSample))
+sampleCorpus <- tm_map(sampleCorpus, content_transformer(tolower))
+sampleCorpus <- tm_map(sampleCorpus, removeNumbers)
+sampleCorpus <- tm_map(sampleCorpus, removePunctuation)
+sampleCorpus <- tm_map(sampleCorpus, stripWhitespace)
+sampleCorpus <- tm_map(sampleCorpus,stemDocument)
+sampleCorpus <- tm_map(sampleCorpus,
+                     removeWords, stopwords("english"))
+ 
+## LOGIC FOR PROFANITIES
+# badWordListURL <- "http://raw.githubusercontent.com/shutterstock/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en"
+ 
+##badWordList <- download.file(badWordListURL,"badWordList.txt")
+badWordList <- readLines("./badWordList.txt")
+ 
+sampleCorpus <- tm_map(sampleCorpus,
+                     removeWords, badWordList)
+
+sampleCorpus <- tm_map(sampleCorpus, PlainTextDocument) 
+
+```
+ 
+ 
+ 
+###Exploratory Analysis
+ 
+####Tokenize the data
+My next step is to tokenize the data into sets of 2, 3 and 4 n-grams. 
+
+```{r, warning=FALSE}
+library(slam)
+library(NLP)
+library(tm)
+library(RWeka)
+options(mc.cores=1)
+
+BigramTokenizer <- function(x) {RWeka::NGramTokenizer(x, RWeka::Weka_control(min = 2, max = 2))}
+bitoken <- list(tokenize = BigramTokenizer)
+
+TrigramTokenizer <- function(x) {RWeka::NGramTokenizer(x, RWeka::Weka_control(min = 3, max = 3))}
+tritoken <- list(tokenize = TrigramTokenizer)
+
+QuadgramTokenizer <- function(x) {RWeka::NGramTokenizer(x, RWeka::Weka_control(min = 4, max = 4))}
+quadtoken <- list(tokenize = QuadgramTokenizer)
+
+
+Ngram2 <- TermDocumentMatrix(sampleCorpus,control = bitoken)
+Ngram3 <- TermDocumentMatrix(sampleCorpus,control = tritoken)
+Ngram4 <- TermDocumentMatrix(sampleCorpus,control = quadtoken)
+
+##ngram2 <- removeSparseTerms(ngram2, 0.1) # only keep 0.1 empty space
+
+##Determine frequencies
+Ngram2freq <- sort(rowapply_simple_triplet_matrix(Ngram2,sum), decreasing = TRUE)
+Ngram3freq <- sort(rowapply_simple_triplet_matrix(Ngram3,sum), decreasing = TRUE)
+Ngram4freq <- sort(rowapply_simple_triplet_matrix(Ngram4,sum), decreasing = TRUE)
+ 
+```
+ 
+####Plot Frequencies 
+
+```{r, echo=FALSE, warning=FALSE}
+ library(ggplot2) 
+ num <- 20
+ ngram2df <- head(data.frame(terms=names(Ngram2freq), 
+                             freq=Ngram2freq),n=num)
+ ngram3df <- head(data.frame(terms=names(Ngram3freq), 
+                             freq=Ngram3freq),n=num)
+
+ ngram4df <- head(data.frame(terms=names(Ngram4freq), 
+                        freq=Ngram4freq), n=num)
+
+ 
+
+plot2 <-ggplot(ngram2df,aes(terms, freq))   
+plot2 <- plot2 + geom_bar(fill="white", colour=ngram2df$freq
+                          ,stat="identity") + 
+    scale_x_discrete(limits=ngram2df$terms)
+plot2 <- plot2 + theme(axis.text.x=element_text(angle=45, hjust=1))  
+plot2 <- plot2 + labs(x = "Terms", 
+                      y="Frequency", 
+                      title="Top 10 Bigrams in Sample")
+plot2  
+
+plot3 <-ggplot(ngram3df,aes(terms, freq))   
+plot3 <- plot3 + geom_bar(fill="white", colour=ngram3df$freq
+                          ,stat="identity") + 
+    scale_x_discrete(limits=ngram3df$terms)
+plot3 <- plot3 + theme(axis.text.x=element_text(angle=45, hjust=1))  
+plot3 <- plot3 + labs(x = "Terms", 
+                      y="Frequency", 
+                      title="Top 10 Trigrams in Sample")
+plot3
+
+plot4 <-ggplot(ngram4df,aes(terms, freq))   
+plot4 <- plot4 + geom_bar(fill="white", 
+                          colour=ngram4df$freq,
+                          stat="identity") +
+                          scale_x_discrete(limits=ngram4df$terms)
+plot4 <- plot4 + theme(axis.text.x=element_text(angle=45, hjust=1))  
+plot4 <- plot4 + labs(x = "Terms", 
+                      y="Frequency", 
+                      title="Top 10 Fourgrams in Sample")
+plot4  
+ 
+```
+
+###Prediction Strategy And Shiny App Thoughts
+My prediction model has not been finalized but my thoughts include:
+
+1) Improve the comprehensiveness of my data by increasing the sample size but not enough that it degrades performance
+2) Perform data cleansing routines like the examples above
+3) Create n-grams and leverage the resuling n-gram lists to provide the basis for prediction. 
+4) Use existing processes such as the Markov Chain to refine the model
+5) Test the algorithm using sample and test datasets
+6) Refine the size of the samples and processing time
+
+As far as the Shiny app is concerned, I envision creating a text box to hold a word or phrase which would be the main input to my algorithm.  Depending on the size of the phrase, I would choose the last *n* number of words to apply as parameters into my algorithm.  For the purposes of the exercise I may limit it to up to 3 of the last words written in that text box since I will likely only tokenize up to a four-gram dataset.  
