@@ -12,8 +12,10 @@ unidata = read.table("unidata.txt.small", colClasses = c("character","character"
 shinyServer(function(input, output) {
     shinyjs::toggle("inputBox")
     output$inputs <- renderText(input$inputPhrase)
+    
     output$nextWord <- renderPrint({
-         matchPhrase(input$inputPhrase)
+        normalPhrase <- normalizePhrase(input$inputPhrase)
+        matchPhrase(normalPhrase)
          })
     #output$nextWord <- renderPrint(retval)
     
