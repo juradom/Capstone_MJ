@@ -10,7 +10,7 @@ normalizePhrase <- function(phrase){
     return(normalPhrase)
 }
 
-matchPhrase <- function(matchPhrase){
+matchPhrase <- function(matchPhrase, cnt){
     matchPhrase <- normalizePhrase(matchPhrase)
     splitPhrase <- strsplit(matchPhrase, split=" ")
     count <- length(splitPhrase[[1]])
@@ -18,31 +18,47 @@ matchPhrase <- function(matchPhrase){
     retList <- ""
     if (count==3){
         data <- quaddata
-        retList <- head(grep(wordPattern,data$terms),n=1)
+        retList <- head(grep(wordPattern,data$terms),n=cnt)
         if(invalid(retList)){
             data <- tridata
-            retList <- head(grep(wordPattern,data$terms),n=1)
+            retList <- head(grep(wordPattern,data$terms),n=cnt)
+            if(invalid(retList)){
+                data <- bidata
+                retList <- head(grep(wordPattern,data$terms),n=cnt)
+                if(invalid(retList)){
+                    data <- unidata
+                    retList <- head(grep(wordPattern,data$terms),n=cnt)
+                }
+            }
+            
         }
-        if(invalid(retList)){
-            data <- bidata
-            retList <- head(grep(wordPattern,data$terms),n=1)
-        }
+        
     }
     if (count==2){
         data <- tridata
-        retList <- head(grep(wordPattern,data$terms),n=1)
+        retList <- head(grep(wordPattern,data$terms),n=cnt)
         if(invalid(retList)){
             data <- bidata
-            retList <- head(grep(wordPattern,data$terms),n=1)
-        }        
+            retList <- head(grep(wordPattern,data$terms),n=cnt)
+            if(invalid(retList)){
+                data <- unidata
+                retList <- head(grep(wordPattern,data$terms),n=cnt)
+            }
+        }      
+        
     }
     if (count==1){
         data <- bidata
-        retList <- head(grep(wordPattern,data$terms),n=1)
+        retList <- head(grep(wordPattern,data$terms),n=cnt)
+        if(invalid(retList)){
+            data <- unidata
+            retList <- head(grep(wordPattern,data$terms),n=cnt)
+        }
     }
+    
     if (count==0){
         data <- unidata
-        retList <- head(grep(wordPattern,data$terms),n=1)
+        retList <- head(grep(wordPattern,data$terms),n=cnt)
     }
     
     

@@ -14,8 +14,7 @@ shinyServer(function(input, output) {
     output$inputs <- renderText(input$inputPhrase)
     
     output$nextWord <- renderPrint({
-        normalPhrase <- normalizePhrase(input$inputPhrase)
-        matchPhrase(normalPhrase)
+        matchPhrase(input$inputPhrase, input$sliderVal)
          })
     #output$nextWord <- renderPrint(retval)
     
