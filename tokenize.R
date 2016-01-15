@@ -33,7 +33,7 @@ close(newsCon)
 # twitterSample <- sample(twitter, sampleSize)
 # blogSample <- sample(blogs, sampleSize)
 # newsSample <- sample(news, sampleSize)
- 
+  
  
 ## combine the files
 fullSample <- c(twitterSample, blogSample, newsSample)
