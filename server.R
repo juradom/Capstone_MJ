@@ -1,24 +1,21 @@
 library(shiny)
 library(shinyjs, quietly=T, warn.conflicts=F)
+library(stringr)
 source("predict.R")
-#quaddata = read.table("quaddata.txt.small", colClasses = c("character","character"))
-#tridata = read.table("tridata.txt.small", colClasses = c("character","character"))
+quaddata = read.table("quaddata.txt.small", colClasses = c("character","character"))
+tridata = read.table("tridata.txt.small", colClasses = c("character","character"))
 bidata = read.table("bidata.txt.small", colClasses = c("character","character"))
 unidata = read.table("unidata.txt.small", colClasses = c("character","character"))
 
 
 # create server
 shinyServer(function(input, output) {
-    toggle("inputBox")
-    toggle("inputBox")
+    shinyjs::toggle("inputBox")
     output$inputs <- renderText(input$inputPhrase)
-    toggle("inputBox")
-    retval <- reactive({
-         retval <- matchPhrase(input$inputPhrase)
-#    retval <- input$inputPhrase
+    output$nextWord <- renderPrint({
+         matchPhrase(input$inputPhrase)
          })
-    toggle("inputBox")
-    output$nextWord <- renderPrint(retval())
+    #output$nextWord <- renderPrint(retval)
     
     
 })

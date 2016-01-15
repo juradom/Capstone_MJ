@@ -29,9 +29,11 @@ matchPhrase <- function(matchPhrase){
     }
     if (count==1){
         data <- bidata
+        retList <- head(grep(wordPattern,data$terms),n=1)
     }
     if (count==0){
         data <- unidata
+        retList <- head(grep(wordPattern,data$terms),n=1)
     }
     
     
@@ -39,7 +41,7 @@ matchPhrase <- function(matchPhrase){
         retVal <- "No Results"
     } else
     {
-        retVal <- data.frame(word(data[retList,]$terms,-1))
+        retVal <- word(data[retList,]$terms,-1)
         
     }
     
