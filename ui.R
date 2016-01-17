@@ -4,6 +4,8 @@ library(shinydashboard)
 library(shinythemes)
 library(knitr)
 library(shinyjs, quietly=T, warn.conflicts=F)
+library(rmarkdown)
+library(ggplot2)
 
 
 # create UI
