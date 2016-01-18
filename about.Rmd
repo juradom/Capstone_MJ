@@ -1,0 +1,11 @@
+---
+title: "About This Application"
+output: html_document
+---
+
+The goal of this Shiny application was to predict the next word from a phrase entered by the user. The application uses a set of Twitter, blog, and news sources were used to create the corpus. The data was derived from [HC Corpora](http://www.corpora.heliohost.org).  
+
+To use this application, simply type in a phrase in the text box provided.  Optionally, you may opt to have the application return several predicted words based on your phrase.  Please note that during the initial startup, there may be a 30 second delay to load the data that supports the predictive algorithm.
+
+The source code for this project can be located on [GitHub](https://github.com/juradom/Capstone_MJ).
+

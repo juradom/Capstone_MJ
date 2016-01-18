@@ -40,9 +40,9 @@ shinyUI(navbarPage(title = "Coursera Data Science Capstone",
     tabPanel("About",
              fluidRow(
                  column(2,
-                        p("")),
+                        h4("About The Application")),
                  column(8,
-                        "test"),
+                        h5(includeMarkdown("./about.Rmd"))),
                  column(2,
                         p(""))
              )

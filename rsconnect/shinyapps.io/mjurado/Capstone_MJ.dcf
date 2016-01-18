@@ -1,8 +1,8 @@
 name: Capstone_MJ
 account: mjurado
 server: shinyapps.io
-bundleId: 351207
+bundleId: 351471
 url: https://mjurado.shinyapps.io/Capstone_MJ/
-when: 1453048174.15453
+when: 1453082803.70297
 asMultiple: FALSE
 asStatic: FALSE
