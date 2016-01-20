@@ -759,30 +759,16 @@ hljs.initHighlightingOnLoad();
 <section data-transition="zoom" data-transition-speed="default">
 <h3>Summary</h3>
 <div class="slideContent" >
-<p>This presentation is part of Coursera Data Science Capstone project.  </p>
+<p>The goal of this Shiny application was to predict the next word from a phrase entered by the user. The application uses a set of Twitter, blog, and news sources used to create the corpus. The data was derived from <a href="http://www.corpora.heliohost.org">HC Corpora</a>. </p>
 
 <p>The course project consists of two parts:</p>
 
 <ul>
 <li>An interactive Shiny application that predicts the next word from a random n-gram</li>
-<li>A pitch developed using RStudio Presenter</li>
+<li>A pitch developed using RStudio Presenter </li>
 </ul>
 
 <p>The data for this Shiny application was a specific dataset for the Coursera Capstone and can be found <a href="https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip">here</a>.</p>
-
-</div>
-
-</section>
-<section data-transition="zoom" data-transition-speed="default">
-<h3>About the Application</h3>
-<div class="slideContent" >
-<p>The goal of this Shiny application was to predict the next word from a phrase entered by the user. The application uses a set of Twitter, blog, and news sources were used to create the corpus. The data was derived from <a href="http://www.corpora.heliohost.org">HC Corpora</a>.  </p>
-
-<p>To use this application, simply type in a phrase in the text box provided.  Optionally, you may opt to have the application return several predicted words based on your phrase.  Please note that during the initial startup, there may be a 30 second delay to load the data that supports the predictive algorithm.</p>
-
-<p>General instructions can also be found by selecting the <strong>About</strong> tab at the top of the <a href="https://mjurado.shinyapps.io/Capstone_MJ/">webpage</a>.</p>
-
-<p>The source code for this project can be located on <a href="https://github.com/juradom/Capstone_MJ">GitHub</a>.</p>
 
 </div>
 
@@ -813,6 +799,18 @@ Below are the steps taken to clean the data:</p>
 <p>After the data was cleaned up, it was then tokenized into n-grams using the RWeka NGramTokenizer function.  Once the n-grams were determined their frequencies were summarized and sorted to be used in my algorithm.</p>
 
 <p>My algorithm relies on a backoff approach where the prediction is determined by a combination of phrase frequency and n-gram length.  Priority was given to the n-grams with longer matching sequences.</p>
+
+</div>
+
+</section>
+<section data-transition="zoom" data-transition-speed="default">
+<h3>About the Application</h3>
+<div class="slideContent" >
+<p>To use this application, go to this <a href="https://mjurado.shinyapps.io/Capstone_MJ/">location</a> and simply type in a phrase in the text box provided.  Optionally, you may opt to have the application return several predicted words based on your phrase.  Please note that during the initial startup, there may be a 30 second delay to load the data that supports the predictive algorithm.</p>
+
+<p>General instructions can also be found by selecting the <strong>About</strong> tab at the top of the <a href="https://mjurado.shinyapps.io/Capstone_MJ/">webpage</a>.</p>
+
+<p>The source code for this project can be located on <a href="https://github.com/juradom/Capstone_MJ">GitHub</a>.</p>
 
 </div>
 

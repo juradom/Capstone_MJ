@@ -6,14 +6,14 @@ library(ggplot2)
 
 source("predict.R")
 
-quaddata = read.table("./quaddata.txt.small"
+quaddata = read.table("./quaddata.final.txt"
+                      , colClasses = c("character","character"))
+tridata = read.table("./tridata.final.txt"
                      , colClasses = c("character","character"))
-tridata = read.table("./tridata.txt.small"
+bidata = read.table("./bidata.final.txt"
                     , colClasses = c("character","character"))
-bidata = read.table("./bidata.txt.small"
-                    , colClasses = c("character","character"))
-unidata = read.table("./unidata.txt.small", colClasses = c("character","character"))
-
+unidata = read.table("./unidata.final.txt"
+                     , colClasses = c("character","character"))
 
 # create server
 shinyServer(function(input, output) {
