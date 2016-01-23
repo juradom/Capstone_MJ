@@ -38,7 +38,9 @@ Below are the steps taken to clean the data:
 Tokenization & Algorithm Approach
 ========================================================
 
-After the data was cleaned up, it was then tokenized into n-grams using the RWeka NGramTokenizer function.  Once the n-grams were determined their frequencies were summarized and sorted to be used in my algorithm.
+After the data was cleaned up, it was then tokenized into n-grams using the RWeka NGramTokenizer function.  Once the n-grams were determined their frequencies were summarized and sorted to be used in my algorithm.  
+
+For efficiency purposes, I removed any ngrams where the frequency was 1 which reduced the size of my files significantly.
 
 My algorithm relies on a backoff approach where the prediction is determined by a combination of phrase frequency and n-gram length.  Priority was given to the n-grams with longer matching sequences.
 

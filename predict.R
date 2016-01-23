@@ -10,7 +10,6 @@ bidata = read.table("./bidata.final.txt"
 unidata = read.table("./unidata.final.txt"
                             , colClasses = c("character","character"))
 
-
 normalizePhrase <- function(phrase){
     normalPhrase <- tolower(phrase)
     normalPhrase <- removePunctuation(normalPhrase)
@@ -31,19 +30,18 @@ matchPhrase <- function(phrase, cnt){
         wordPattern <- paste("^",phrase,sep="")
     }
     
-    retList <- ""
     if (count==3){
-        mpdata <- quaddata
-        retList <- head(grep(wordPattern,mpdata$terms),n=cnt)
+        retList <- head(grep(wordPattern,quaddata$terms),n=cnt)
+        retVal <- word(quaddata[retList,]$terms,-1)
         if(invalid(retList)){
-            mpdata <- tridata
-            retList <- head(grep(wordPattern,mpdata$terms),n=cnt)
+            retList <- head(grep(wordPattern,tridata$terms),n=cnt)
+            retVal <- word(tridata[retList,]$terms,-1)
             if(invalid(retList)){
-                mpdata <- bidata
-                retList <- head(grep(wordPattern,mpdata$terms),n=cnt)
+                retList <- head(grep(wordPattern,bidata$terms),n=cnt)
+                retVal <- word(bidata[retList,]$terms,-1)
                 if(invalid(retList)){
-                    mpdata <- unidata
-                    retList <- head(grep(wordPattern,mpdata$terms),n=cnt)
+                    retList <- head(grep(wordPattern,unidata$terms),n=cnt)
+                    retVal <- word(unidata[retList,]$terms,-1)
                 }
             }
             
@@ -51,39 +49,38 @@ matchPhrase <- function(phrase, cnt){
         
     }
     if (count==2){
-        mpdata <- tridata
-        retList <- head(grep(wordPattern,mpdata$terms),n=cnt)
+        retList <- head(grep(wordPattern,tridata$terms),n=cnt)
+        retVal <- word(tridata[retList,]$terms,-1)
         if(invalid(retList)){
-            mpdata <- bidata
-            retList <- head(grep(wordPattern,mpdata$terms),n=cnt)
+            retList <- head(grep(wordPattern,bidata$terms),n=cnt)
+            retVal <- word(bidata[retList,]$terms,-1)
             if(invalid(retList)){
-                mpdata <- unidata
-                retList <- head(grep(wordPattern,mpdata$terms),n=cnt)
+                retList <- head(grep(wordPattern,unidata$terms),n=cnt)
+                retVal <- word(unidata[retList,]$terms,-1)
             }
         }      
         
     }
     if (count==1){
-        mpdata <- bidata
-        retList <- head(grep(wordPattern,mpdata$terms),n=cnt)
+        retList <- head(grep(wordPattern,bidata$terms),n=cnt)
+        retVal <- word(bidata[retList,]$terms,-1)
         if(invalid(retList)){
-            mpdata <- unidata
-            retList <- head(grep(wordPattern,mpdata$terms),n=cnt)
+            retList <- head(grep(wordPattern,unidata$terms),n=cnt)
+            retVal <- word(unidata[retList,]$terms,-1)
         }
     }
     
     if (count==0){
-        mpdata <- unidata
-        retList <- head(grep(wordPattern,mpdata$terms),n=cnt)
+        retList <- head(grep(wordPattern,unidata$terms),n=cnt)
+        retVal <- word(unidata[retList,]$terms,-1)
     }
     
-    result <- word(mpdata[retList,]$terms,-1)
-    if (is.na(result)) {
+    if (invalid(retList)) {
         retVal <- "No Results"
     } 
     else
     {
-        retVal <- result
+        retVal
     }
     
     
