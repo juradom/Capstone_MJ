@@ -31,7 +31,7 @@ Below are the steps taken to clean the data:
 - Remove function words (stop words) 
 - Stem the document by removing common word endings 
 - Remove profanity 
-*Note:  The bad words list was referenced [here](http://raw.githubusercontent.com/shutterstock/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en)*
+*Note:  The bad words list was referenced [here](https://raw.githubusercontent.com/shutterstock/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en)*
 
 
 
@@ -47,9 +47,9 @@ My algorithm relies on a backoff approach where the prediction is determined by 
 About the Application
 ========================================================
 
-To use this application, go to this [location](https://mjurado.shinyapps.io/Capstone_MJ/) and simply type in a phrase in the text box provided.  Optionally, you may opt to have the application return several predicted words based on your phrase.  Please note that during the initial startup, there may be a 30 second delay to load the data that supports the predictive algorithm.
+To use this application, go to this [location](https://mjurado.shinyapps.io/MJ_Capstone/) and simply type in a phrase in the text box provided.  Optionally, you may opt to have the application return several predicted words based on your phrase.  Please note that during the initial startup, there may be a short delay to load the data that supports the predictive algorithm.
 
-General instructions can also be found by selecting the __About__ tab at the top of the [webpage](https://mjurado.shinyapps.io/Capstone_MJ/).
+General instructions can also be found by selecting the __About__ tab at the top of the [webpage](https://mjurado.shinyapps.io/MJ_Capstone/).
 
 The source code for this project can be located on [GitHub](https://github.com/juradom/Capstone_MJ).
 

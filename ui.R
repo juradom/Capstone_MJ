@@ -6,7 +6,7 @@ library(knitr)
 library(shinyjs, quietly=T, warn.conflicts=F)
 library(rmarkdown)
 library(ggplot2)
-
+ 
 
 # create UI
 shinyUI(navbarPage(title = "Coursera Data Science Capstone",
@@ -30,9 +30,6 @@ shinyUI(navbarPage(title = "Coursera Data Science Capstone",
                 code(id = "inputBox", "Please wait, loading ..."),
                 h4("You entered: "),
                 h4(textOutput("inputs")),
-                h1(""),
-                h4("Processed Value: "),
-                h4(textOutput("trimInputs")),
                 h1(""),
                 h4("The predicted word(s) is/are: "),
                 h4(textOutput("nextWord"))
